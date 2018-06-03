@@ -64,6 +64,7 @@ preferences {
 	input "valves", "capability.valve",title: "Valves", multiple: true, required: false
 	input "videoStreams", "capability.videoStream",title: "Video Streams", multiple: true, required: false
 	input "waterSensors", "capability.waterSensor",title: "Water Sensors", multiple: true, required: false
+	input "rachioControllers", "device.rachioSprinklerController",title: "Rachio Sprinkler Controller", multiple: true, required: false
     }
 }
 
@@ -295,6 +296,50 @@ def getCurrentValues() {
       resp << [id: it.id, capability: "WaterSensor", attribute: "water", value: it.currentValue("water")]
     }
    
+	rachioControllers.each {
+		resp << [id: it.id, capability: "IrrigationController", attribute: "switch", value: it.currentValue("switch")]
+	}
+
+	rachioControllers.each {
+		resp << [id: it.id, capability: "IrrigationController", attribute: "valve", value: it.currentValue("valve")]
+	}
+
+	rachioControllers.each {
+		resp << [id: it.id, capability: "IrrigationController", attribute: "activeZoneCnt", value: it.currentValue("activeZoneCnt")]
+	}
+
+	rachioControllers.each {
+		resp << [id: it.id, capability: "IrrigationController", attribute: "controllerOn", value: it.currentValue("controllerOn")]
+	}
+
+	rachioControllers.each {
+		resp << [id: it.id, capability: "IrrigationController", attribute: "curZoneRunStatus", value: it.currentValue("curZoneRunStatus")]
+	}
+
+	rachioControllers.each {
+		resp << [id: it.id, capability: "IrrigationController", attribute: "curZoneName", value: it.currentValue("curZoneName")]
+	}
+
+	rachioControllers.each {
+		resp << [id: it.id, capability: "IrrigationController", attribute: "curZoneNumber", value: it.currentValue("curZoneNumber")]
+	}
+
+	rachioControllers.each {
+		resp << [id: it.id, capability: "IrrigationController", attribute: "curZoneDuration", value: it.currentValue("curZoneDuration")]
+	}
+
+	rachioControllers.each {
+		resp << [id: it.id, capability: "IrrigationController", attribute: "curZoneStartDate", value: it.currentValue("curZoneStartDate")]
+	}
+
+	rachioControllers.each {
+		resp << [id: it.id, capability: "IrrigationController", attribute: "rainDelayStr", value: it.currentValue("rainDelayStr")]
+	}
+
+	rachioControllers.each {
+		resp << [id: it.id, capability: "IrrigationController", attribute: "scheduleType", value: it.currentValue("scheduleType")]
+	}
+
    	//resp << [id: 0, capability: "Heartbeat", attribute: "heartbeat", value: String.valueOf(state.heartbeat)]
     
     state.heartbeat = !state.heartbeat
@@ -501,6 +546,50 @@ def getCurrentValuesWithDisplayName() {
 	waterSensors.each {
       resp << [id: it.id, displayName: it.displayName, capability: "WaterSensor", attribute: "water", value: it.currentValue("water")]
     }
+       
+	rachioControllers.each {
+		resp << [id: it.id, displayName: it.displayName, capability: "IrrigationController", attribute: "switch", value: it.currentValue("switch")]
+	}
+
+	rachioControllers.each {
+		resp << [id: it.id, displayName: it.displayName, capability: "IrrigationController", attribute: "valve", value: it.currentValue("valve")]
+	}
+
+	rachioControllers.each {
+		resp << [id: it.id, displayName: it.displayName, capability: "IrrigationController", attribute: "activeZoneCnt", value: it.currentValue("activeZoneCnt")]
+	}
+
+	rachioControllers.each {
+		resp << [id: it.id, displayName: it.displayName, capability: "IrrigationController", attribute: "controllerOn", value: it.currentValue("controllerOn")]
+	}
+
+	rachioControllers.each {
+		resp << [id: it.id, displayName: it.displayName, capability: "IrrigationController", attribute: "curZoneRunStatus", value: it.currentValue("curZoneRunStatus")]
+	}
+
+	rachioControllers.each {
+		resp << [id: it.id, displayName: it.displayName, capability: "IrrigationController", attribute: "curZoneName", value: it.currentValue("curZoneName")]
+	}
+
+	rachioControllers.each {
+		resp << [id: it.id, displayName: it.displayName, capability: "IrrigationController", attribute: "curZoneNumber", value: it.currentValue("curZoneNumber")]
+	}
+
+	rachioControllers.each {
+		resp << [id: it.id, displayName: it.displayName, capability: "IrrigationController", attribute: "curZoneDuration", value: it.currentValue("curZoneDuration")]
+	}
+
+	rachioControllers.each {
+		resp << [id: it.id, displayName: it.displayName, capability: "IrrigationController", attribute: "curZoneStartDate", value: it.currentValue("curZoneStartDate")]
+	}
+
+	rachioControllers.each {
+		resp << [id: it.id, displayName: it.displayName, capability: "IrrigationController", attribute: "rainDelayStr", value: it.currentValue("rainDelayStr")]
+	}
+
+	rachioControllers.each {
+		resp << [id: it.id, displayName: it.displayName, capability: "IrrigationController", attribute: "scheduleType", value: it.currentValue("scheduleType")]
+	}
    
     momentaries.each {
       resp << [id: it.id, displayName: it.displayName, capability: "Momentary", attribute: "", value: ""]
@@ -576,6 +665,9 @@ def getDevices(capability){
         case "Valve":
         	result = valves
         	break     
+        case "IrrigationController":
+            result = rachioControllers
+            break
     	default:
         	result = valves
 	}
