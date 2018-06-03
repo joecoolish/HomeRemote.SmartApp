@@ -1,7 +1,7 @@
 /**
  *  Home Remote
  *
- *  Copyright 2015 The Home Remote
+ *  Copyright 2018 The Home Remote
  *
  *  Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  *  in compliance with the License. You may obtain a copy of the License at:
@@ -34,6 +34,7 @@ preferences {
 	input "buttonGroup", "capability.button",title: "Buttons", multiple: true, required: false
 	input "carbonMonoxideDetectors", "capability.carbonMonoxideDetector",title: "CO Detectors", multiple: true, required: false
 	input "colorControls", "capability.colorControl",title: "Color Lights", multiple: true, required: false
+	input "colorTemperatures", "capability.colorTemperature", title: "Color Temperatures", multiple: true, required: false
 	input "contactSensors", "capability.contactSensor",title: "Contact Sensors", multiple: true, required: false
 	input "doorControls", "capability.doorControl",title: "Door Controllers", multiple: true, required: false
 	input "energyMeters", "capability.energyMeter",title: "Energy Meters", multiple: true, required: false
@@ -61,6 +62,7 @@ preferences {
 	input "tones", "capability.tone",title: "Tones", multiple: true, required: false
 	input "touchSensors", "capability.touchSensor",title: "Touch Sensors", multiple: true, required: false
 	input "valves", "capability.valve",title: "Valves", multiple: true, required: false
+	input "videoStreams", "capability.videoStream",title: "Video Streams", multiple: true, required: false
 	input "waterSensors", "capability.waterSensor",title: "Water Sensors", multiple: true, required: false
     }
 }
@@ -130,6 +132,10 @@ def getCurrentValues() {
 
 	colorControls.each {
       resp << [id: it.id, capability: "ColorControl", attribute: "color", value: it.currentValue("color")]
+    }
+
+	colorTemperatures.each {
+      resp << [id: it.id, capability: "ColorTemperature", attribute: "colorTemperature", value: it.currentValue("colorTemperature")]
     }
 
 	contactSensors.each {
@@ -281,6 +287,10 @@ def getCurrentValues() {
       resp << [id: it.id, capability: "Valve", attribute: "contact", value: it.currentValue("contact")]
     }
 
+	videoStreams.each {
+      resp << [id: it.id, capability: "VideoStream", attribute: "stream", value: it.currentValue("stream")]
+    }
+
 	waterSensors.each {
       resp << [id: it.id, capability: "WaterSensor", attribute: "water", value: it.currentValue("water")]
     }
@@ -329,6 +339,10 @@ def getCurrentValuesWithDisplayName() {
 
 	colorControls.each {
       resp << [id: it.id, displayName: it.displayName, capability: "ColorControl", attribute: "color", value: it.currentValue("color")]
+    }
+
+	colorTemperatures.each {
+      resp << [id: it.id, displayName: it.displayName, capability: "ColorTemperature", attribute: "colorTemperature", value: it.currentValue("colorTemperature")]
     }
 
 	contactSensors.each {
@@ -480,6 +494,10 @@ def getCurrentValuesWithDisplayName() {
       resp << [id: it.id, displayName: it.displayName, capability: "Valve", attribute: "contact", value: it.currentValue("contact")]
     }
 
+	videoStreams.each {
+      resp << [id: it.id, displayName: it.displayName, capability: "VideoStream", attribute: "stream", value: it.currentValue("stream")]
+    }
+
 	waterSensors.each {
       resp << [id: it.id, displayName: it.displayName, capability: "WaterSensor", attribute: "water", value: it.currentValue("water")]
     }
@@ -504,6 +522,9 @@ def getDevices(capability){
     	case "ColorControl":
         	result = colorControls
         	break
+		case "ColorTemperature":
+			result = colorTemperatures
+			break
     	case "DoorControl":
         	result = doorControls
         	break
@@ -671,6 +692,11 @@ void executeCommand() {
                 value = [hue:hsv.h.toInteger(), saturation:hsv.s.toInteger()]
                 valueIsParameter = true				
         		break
+			case "colorTemperature":
+				command = "setColorTemperature"
+				valueIsParameter = true
+                valueIsInteger = true
+				break
 			case "level":
         		command = "setLevel"
                 valueIsParameter = true
